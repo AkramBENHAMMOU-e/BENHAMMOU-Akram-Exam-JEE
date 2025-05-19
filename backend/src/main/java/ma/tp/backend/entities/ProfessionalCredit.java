@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfessionalCredit extends Credit {
     private String reason;
-    private String companyName; // "raison sociale" in French
+    private String companyName;
 }

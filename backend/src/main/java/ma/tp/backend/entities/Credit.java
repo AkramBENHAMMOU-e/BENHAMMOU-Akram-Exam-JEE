@@ -29,7 +29,7 @@ public abstract class Credit {
     private Date acceptanceDate;
 
     private Double amount;
-    private Integer repaymentDuration; // in months
+    private Integer repaymentDuration;
     private Double interestRate;
 
     @ManyToOne
