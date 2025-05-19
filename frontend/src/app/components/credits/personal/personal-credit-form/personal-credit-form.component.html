@@ -1,0 +1,160 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3>{{ isEditMode ? 'Edit Personal Credit' : 'Add New Personal Credit' }}</h3>
+    </div>
+    <div class="card-body">
+      @if (loading || loadingClients) {
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      } @else if (error) {
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+      } @else {
+        <form [formGroup]="creditForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="clientId" class="form-label">Client</label>
+            <select
+              class="form-select"
+              id="clientId"
+              formControlName="clientId"
+              [ngClass]="{ 'is-invalid': submitted && f['clientId'].errors }"
+            >
+              <option value="">Select a client</option>
+              @for (client of clients; track client.id) {
+                <option [value]="client.id">{{ client.name }} ({{ client.email }})</option>
+              }
+            </select>
+            @if (submitted && f['clientId'].errors) {
+              <div class="invalid-feedback">
+                @if (f['clientId'].errors?.['required']) {
+                  Client is required
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                formControlName="amount"
+                [ngClass]="{ 'is-invalid': submitted && f['amount'].errors }"
+              >
+              <div class="invalid-feedback">
+                @if (submitted && f['amount'].errors) {
+                  @if (f['amount'].errors?.['required']) {
+                    Amount is required
+                  }
+                  @if (f['amount'].errors?.['min']) {
+                    Amount must be greater than 0
+                  }
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="repaymentDuration" class="form-label">Repayment Duration (months)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="repaymentDuration"
+                  formControlName="repaymentDuration"
+                  [ngClass]="{ 'is-invalid': submitted && f['repaymentDuration'].errors }"
+                >
+                @if (submitted && f['repaymentDuration'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['repaymentDuration'].errors?.['required']) {
+                      Repayment duration is required
+                    }
+                    @if (f['repaymentDuration'].errors?.['min']) {
+                      Repayment duration must be at least 1 month
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="interestRate" class="form-label">Interest Rate (%)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="interestRate"
+                  formControlName="interestRate"
+                  step="0.1"
+                  [ngClass]="{ 'is-invalid': submitted && f['interestRate'].errors }"
+                >
+                @if (submitted && f['interestRate'].errors) {
+                  <div class="invalid-feedback">
+                    @if (f['interestRate'].errors?.['required']) {
+                      Interest rate is required
+                    }
+                    @if (f['interestRate'].errors?.['min']) {
+                      Interest rate cannot be negative
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="reason" class="form-label">Reason</label>
+            <input
+              type="text"
+              class="form-control"
+              id="reason"
+              formControlName="reason"
+              [ngClass]="{ 'is-invalid': submitted && f['reason'].errors }"
+            >
+            @if (submitted && f['reason'].errors) {
+              <div class="invalid-feedback">
+                @if (f['reason'].errors?.['required']) {
+                  Reason is required
+                }
+              </div>
+            }
+          </div>
+
+          @if (isEditMode) {
+            <div class="mb-3">
+              <label for="status" class="form-label">Status</label>
+              <select
+                class="form-select"
+                id="status"
+                formControlName="status"
+              >
+                <option [value]="CreditStatus.IN_PROGRESS">In Progress</option>
+                <option [value]="CreditStatus.ACCEPTED">Accepted</option>
+                <option [value]="CreditStatus.REJECTED">Rejected</option>
+              </select>
+            </div>
+          }
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary" [routerLink]="['/personal-credits']">
+              <i class="bi bi-arrow-left me-1"></i> Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <i class="bi" [ngClass]="isEditMode ? 'bi-save' : 'bi-plus-circle'"></i>
+              {{ isEditMode ? 'Update' : 'Create' }}
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
