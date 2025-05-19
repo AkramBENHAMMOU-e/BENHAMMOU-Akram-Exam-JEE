@@ -40,7 +40,6 @@ public class CreditServiceImpl implements CreditService {
         this.creditMapper = creditMapper;
     }
 
-    // Client related operations
     @Override
     public ClientDTO saveClient(ClientDTO clientDTO) {
         Client client = creditMapper.toClient(clientDTO);
@@ -78,7 +77,6 @@ public class CreditServiceImpl implements CreditService {
         clientRepository.deleteById(id);
     }
 
-    // Credit related operations
     @Override
     public List<CreditDTO> getCreditsByClientId(Long clientId) {
         Client client = clientRepository.findById(clientId).orElse(null);
@@ -97,12 +95,9 @@ public class CreditServiceImpl implements CreditService {
         return creditDTOs;
     }
 
-    // Personal Credit operations
     @Override
     public PersonalCreditDTO savePersonalCredit(PersonalCreditDTO personalCreditDTO) {
         PersonalCredit personalCredit = creditMapper.toPersonalCredit(personalCreditDTO);
-        
-        // Set client
         if (personalCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(personalCreditDTO.getClientId()).orElse(null);
             personalCredit.setClient(client);
@@ -155,12 +150,10 @@ public class CreditServiceImpl implements CreditService {
         personalCreditRepository.deleteById(id);
     }
 
-    // Real Estate Credit operations
     @Override
     public RealEstateCreditDTO saveRealEstateCredit(RealEstateCreditDTO realEstateCreditDTO) {
         RealEstateCredit realEstateCredit = creditMapper.toRealEstateCredit(realEstateCreditDTO);
-        
-        // Set client
+
         if (realEstateCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(realEstateCreditDTO.getClientId()).orElse(null);
             realEstateCredit.setClient(client);
@@ -194,12 +187,8 @@ public class CreditServiceImpl implements CreditService {
         
         RealEstateCredit existingCredit = realEstateCreditRepository.findById(realEstateCreditDTO.getId()).orElse(null);
         RealEstateCredit realEstateCredit = creditMapper.toRealEstateCredit(realEstateCreditDTO);
-        
-        // Preserve relationships
         realEstateCredit.setClient(existingCredit.getClient());
         realEstateCredit.setRepayments(existingCredit.getRepayments());
-        
-        // Update client if clientId has changed
         if (realEstateCreditDTO.getClientId() != null && 
             (existingCredit.getClient() == null || !existingCredit.getClient().getId().equals(realEstateCreditDTO.getClientId()))) {
             Client client = clientRepository.findById(realEstateCreditDTO.getClientId()).orElse(null);
@@ -215,12 +204,10 @@ public class CreditServiceImpl implements CreditService {
         realEstateCreditRepository.deleteById(id);
     }
 
-    // Professional Credit operations
     @Override
     public ProfessionalCreditDTO saveProfessionalCredit(ProfessionalCreditDTO professionalCreditDTO) {
         ProfessionalCredit professionalCredit = creditMapper.toProfessionalCredit(professionalCreditDTO);
-        
-        // Set client
+
         if (professionalCreditDTO.getClientId() != null) {
             Client client = clientRepository.findById(professionalCreditDTO.getClientId()).orElse(null);
             professionalCredit.setClient(client);
@@ -254,12 +241,9 @@ public class CreditServiceImpl implements CreditService {
         
         ProfessionalCredit existingCredit = professionalCreditRepository.findById(professionalCreditDTO.getId()).orElse(null);
         ProfessionalCredit professionalCredit = creditMapper.toProfessionalCredit(professionalCreditDTO);
-        
-        // Preserve relationships
+
         professionalCredit.setClient(existingCredit.getClient());
         professionalCredit.setRepayments(existingCredit.getRepayments());
-        
-        // Update client if clientId has changed
         if (professionalCreditDTO.getClientId() != null && 
             (existingCredit.getClient() == null || !existingCredit.getClient().getId().equals(professionalCreditDTO.getClientId()))) {
             Client client = clientRepository.findById(professionalCreditDTO.getClientId()).orElse(null);
@@ -274,13 +258,9 @@ public class CreditServiceImpl implements CreditService {
     public void deleteProfessionalCredit(Long id) {
         professionalCreditRepository.deleteById(id);
     }
-
-    // Repayment operations
     @Override
     public RepaymentDTO saveRepayment(RepaymentDTO repaymentDTO) {
         Repayment repayment = creditMapper.toRepayment(repaymentDTO);
-        
-        // Set credit
         if (repaymentDTO.getCreditId() != null) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId()).orElse(null);
             repayment.setCredit(credit);
@@ -313,11 +293,8 @@ public class CreditServiceImpl implements CreditService {
         
         Repayment existingRepayment = repaymentRepository.findById(repaymentDTO.getId()).orElse(null);
         Repayment repayment = creditMapper.toRepayment(repaymentDTO);
-        
-        // Preserve relationships
+
         repayment.setCredit(existingRepayment.getCredit());
-        
-        // Update credit if creditId has changed
         if (repaymentDTO.getCreditId() != null && 
             (existingRepayment.getCredit() == null || !existingRepayment.getCredit().getId().equals(repaymentDTO.getCreditId()))) {
             Credit credit = creditRepository.findById(repaymentDTO.getCreditId()).orElse(null);
@@ -332,8 +309,6 @@ public class CreditServiceImpl implements CreditService {
     public void deleteRepayment(Long id) {
         repaymentRepository.deleteById(id);
     }
-
-    // Business operations
     @Override
     public List<CreditDTO> getCreditsByStatus(CreditStatus status) {
         List<Credit> credits = creditRepository.findAll().stream()
