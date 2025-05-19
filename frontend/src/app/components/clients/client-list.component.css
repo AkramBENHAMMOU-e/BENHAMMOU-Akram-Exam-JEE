@@ -1,0 +1,19 @@
+/* Custom styles for client list */
+.table th {
+  font-weight: 600;
+}
+
+.btn-group {
+  white-space: nowrap;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 0.35em 0.65em;
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}

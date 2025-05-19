@@ -1,0 +1,99 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+      <i class="bi bi-briefcase me-2"></i>
+      Professional Credits
+    </h2>
+    <button class="btn btn-primary" [routerLink]="['/professional-credits/new']">
+      <i class="bi bi-plus-circle me-1"></i>
+      Add New Professional Credit
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else if (error) {
+    <div class="alert alert-danger">
+      {{ error }}
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadProfessionalCredits()">
+        <i class="bi bi-arrow-clockwise"></i> Retry
+      </button>
+    </div>
+  } @else if (professionalCredits.length === 0) {
+    <div class="alert alert-info">
+      No professional credits found. Add a new professional credit to get started.
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Reason</th>
+            <th>Amount</th>
+            <th>Duration</th>
+            <th>Interest Rate</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (credit of professionalCredits; track credit.id) {
+            <tr>
+              <td>{{ credit.id }}</td>
+              <td>{{ credit.companyName }}</td>
+              <td>{{ credit.reason }}</td>
+              <td>{{ credit.amount | currency:'USD' }}</td>
+              <td>{{ credit.repaymentDuration }} months</td>
+              <td>{{ credit.interestRate }}%</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <span class="badge {{ getStatusBadgeClass(credit.status) }} me-2">
+                    {{ credit.status }}
+                  </span>
+                  @if (credit.status !== CreditStatus.ACCEPTED) {
+                    <div class="btn-group btn-group-sm">
+                      @if (credit.status !== CreditStatus.IN_PROGRESS) {
+                        <button class="btn btn-outline-secondary" (click)="changeStatus(credit.id!, CreditStatus.IN_PROGRESS)">
+                          <i class="bi bi-hourglass me-1"></i> In Progress
+                        </button>
+                      }
+                      @if (credit.status !== CreditStatus.ACCEPTED) {
+                        <button class="btn btn-outline-success" (click)="changeStatus(credit.id!, CreditStatus.ACCEPTED)">
+                          <i class="bi bi-check-circle me-1"></i> Accept
+                        </button>
+                      }
+                      @if (credit.status !== CreditStatus.REJECTED) {
+                        <button class="btn btn-outline-danger" (click)="changeStatus(credit.id!, CreditStatus.REJECTED)">
+                          <i class="bi bi-x-circle me-1"></i> Reject
+                        </button>
+                      }
+                    </div>
+                  }
+                </div>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" [routerLink]="['/professional-credits', credit.id]">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" [routerLink]="['/professional-credits', credit.id, 'edit']">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteProfessionalCredit(credit.id!)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
