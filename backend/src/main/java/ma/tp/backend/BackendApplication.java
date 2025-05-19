@@ -31,7 +31,6 @@ public class BackendApplication {
         return args -> {
             System.out.println("Initializing database with sample data...");
 
-            // Create clients
             Client client1 = new Client();
             client1.setName("John Doe");
             client1.setEmail("john.doe@example.com");
@@ -45,7 +44,6 @@ public class BackendApplication {
             clientRepository.save(client1);
             clientRepository.save(client2);
 
-            // Create personal credit
             PersonalCredit personalCredit = new PersonalCredit();
             personalCredit.setRequestDate(new Date());
             personalCredit.setStatus(CreditStatus.ACCEPTED);
@@ -59,7 +57,6 @@ public class BackendApplication {
 
             personalCreditRepository.save(personalCredit);
 
-            // Create real estate credit
             RealEstateCredit realEstateCredit = new RealEstateCredit();
             realEstateCredit.setRequestDate(new Date());
             realEstateCredit.setStatus(CreditStatus.IN_PROGRESS);
@@ -72,7 +69,6 @@ public class BackendApplication {
 
             realEstateCreditRepository.save(realEstateCredit);
 
-            // Create professional credit
             ProfessionalCredit professionalCredit = new ProfessionalCredit();
             professionalCredit.setRequestDate(new Date());
             professionalCredit.setStatus(CreditStatus.ACCEPTED);
@@ -87,7 +83,7 @@ public class BackendApplication {
 
             professionalCreditRepository.save(professionalCredit);
 
-            // Create repayments for personal credit
+
             Repayment repayment1 = new Repayment();
             repayment1.setDate(new Date());
             repayment1.setAmount(450.0);
@@ -103,7 +99,7 @@ public class BackendApplication {
             repaymentRepository.save(repayment1);
             repaymentRepository.save(repayment2);
 
-            // Create repayment for professional credit
+
             Repayment repayment3 = new Repayment();
             repayment3.setDate(new Date());
             repayment3.setAmount(1500.0);
