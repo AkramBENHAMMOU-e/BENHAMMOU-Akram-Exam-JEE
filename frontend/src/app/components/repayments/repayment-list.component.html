@@ -1,0 +1,76 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+      <i class="bi bi-cash-coin me-2"></i>
+      Repayments {{ creditId ? 'for Credit #' + creditId : '' }}
+    </h2>
+    @if (creditId) {
+      <button class="btn btn-primary" [routerLink]="['/credits', creditId, 'repayments', 'new']">
+        <i class="bi bi-plus-circle me-1"></i>
+        Add New Repayment
+      </button>
+    }
+  </div>
+
+  @if (loading) {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else if (error) {
+    <div class="alert alert-danger">
+      {{ error }}
+      @if (creditId) {
+        <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadRepayments()">
+          <i class="bi bi-arrow-clockwise"></i> Retry
+        </button>
+      }
+    </div>
+  } @else if (repayments.length === 0) {
+    <div class="alert alert-info">
+      No repayments found for this credit. Add a new repayment to get started.
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (repayment of repayments; track repayment.id) {
+            <tr>
+              <td>{{ repayment.id }}</td>
+              <td>{{ repayment.date | date:'mediumDate' }}</td>
+              <td>{{ repayment.amount | currency }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-primary': repayment.type === RepaymentType.MONTHLY_PAYMENT,
+                  'bg-success': repayment.type === RepaymentType.EARLY_REPAYMENT
+                }">
+                  {{ getRepaymentTypeLabel(repayment.type) }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-secondary" [routerLink]="['/credits', creditId, 'repayments', repayment.id, 'edit']">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteRepayment(repayment.id!)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

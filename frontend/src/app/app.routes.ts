@@ -6,6 +6,9 @@ import { PersonalCreditFormComponent } from './components/credits/personal/perso
 import { RealEstateCreditListComponent } from './components/credits/real-estate/real-estate-credit-list.component';
 import { RealEstateCreditFormComponent } from './components/credits/real-estate/real-estate-credit-form/real-estate-credit-form.component';
 import { ProfessionalCreditListComponent } from './components/credits/professional/professional-credit-list.component';
+import { ProfessionalCreditFormComponent } from './components/credits/professional/professional-credit-form/professional-credit-form.component';
+import { RepaymentListComponent } from './components/repayments/repayment-list.component';
+import { RepaymentFormComponent } from './components/repayments/repayment-form/repayment-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/clients', pathMatch: 'full' },
@@ -28,9 +31,14 @@ export const routes: Routes = [
   { path: 'real-estate-credits/:id/edit', component: RealEstateCreditFormComponent },
 
   { path: 'professional-credits', component: ProfessionalCreditListComponent },
-  { path: 'professional-credits/new', component: ProfessionalCreditListComponent },
+  { path: 'professional-credits/new', component: ProfessionalCreditFormComponent },
   { path: 'professional-credits/:id', component: ProfessionalCreditListComponent },
-  { path: 'professional-credits/:id/edit', component: ProfessionalCreditListComponent },
+  { path: 'professional-credits/:id/edit', component: ProfessionalCreditFormComponent },
+
+  // Repayment routes
+  { path: 'credits/:creditId/repayments', component: RepaymentListComponent },
+  { path: 'credits/:creditId/repayments/new', component: RepaymentFormComponent },
+  { path: 'credits/:creditId/repayments/:id/edit', component: RepaymentFormComponent },
 
   { path: '**', redirectTo: '/clients' }
 ];
