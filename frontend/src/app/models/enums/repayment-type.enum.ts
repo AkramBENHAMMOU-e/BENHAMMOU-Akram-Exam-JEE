@@ -1,0 +1,4 @@
+export enum RepaymentType {
+  MONTHLY_PAYMENT = 'MONTHLY_PAYMENT',
+  EARLY_REPAYMENT = 'EARLY_REPAYMENT'
+}
